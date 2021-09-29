@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using testpro.models;
 using testpro.Repositories;
+using Microsoft.EntityFrameworkCore;
 namespace testpro.Controllers
 {
     [ApiController]
@@ -16,6 +17,7 @@ namespace testpro.Controllers
 
         private readonly IUserRepo  userRepo = null;
         private readonly IMapper _mapper;
+        
         public List<UserViewModel> test;
         /*private readonly AppDbContext _dbcontext;
         public UserController(AppDbContext dbContext)
@@ -32,13 +34,14 @@ namespace testpro.Controllers
         {
             this.userRepo = userRepo;
             _mapper = mapper;
+            
         }
         [HttpGet]
-        public List<UserViewModel> Get()
+        public async Task<IEnumerable<UserViewModel>> Get()
         {
-           List<UserViewModel> UVML = _mapper.Map<List<User>, List<UserViewModel>>(userRepo.get());
-            
-            return UVML;
+
+            var u = _mapper.Map<IEnumerable<UserViewModel>>(await userRepo.get());
+            return null;
             //return  _mapper.Map<UserViewModel>(temp);
            /* _dbcontext.Users.ToList();
            // _dbcontext.Users.Add(entity: new User(Id: 10) { name = "Test" });
@@ -47,10 +50,10 @@ namespace testpro.Controllers
         }
 
         [HttpGet("{id}")]
-        public UserViewModel Get(int id)
+        public async Task<UserViewModel> Get(int id)
         {
-            UserViewModel UVM = _mapper.Map<UserViewModel>(userRepo.get(id));
-            return UVM ;
+            UserViewModel UVM = _mapper.Map<UserViewModel>(await userRepo.get(id));
+            return UVM;
         }
 
        /* [HttpGet("{Names}")]
@@ -90,6 +93,16 @@ namespace testpro.Controllers
         {
             userRepo.add(user);
         }
-
+        [HttpGet("withposts/{id}")]
+        public Task<User> GetUserWithPosts(int id)
+        {
+            
+             return  userRepo.GetUserWithPosts(id);
+        }
+        [HttpGet("getpage/{size}/{index}")]
+        public  Task<IEnumerable<User>> GetPage(int size, int index)
+        {
+            return userRepo.GetPage(size, index);
+        }
     }
 }

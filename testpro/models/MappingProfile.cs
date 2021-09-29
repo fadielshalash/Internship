@@ -15,6 +15,10 @@ namespace testpro.models
         {
             CreateMap<User, UserViewModel>().ReverseMap();
             CreateMap<UserViewModel, User>().ReverseMap();
+            CreateMap<Post, PostViewModel>().ReverseMap();
+            CreateMap<PostViewModel, Post>().ReverseMap();
+            
+           
         }
     }
 }

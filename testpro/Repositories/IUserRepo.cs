@@ -7,6 +7,6 @@ namespace testpro.Repositories
 {
     public interface IUserRepo : IGenRepo<User> 
     {
-        
+        public Task<User> GetUserWithPosts(int id);
     }
 }

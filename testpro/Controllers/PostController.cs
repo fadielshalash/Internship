@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using testpro.models;
 using testpro.Repositories;
+using AutoMapper;
 namespace WebApplication1.Controllers
 {
     [Route("[controller]")]
@@ -16,22 +17,24 @@ namespace WebApplication1.Controllers
 
 
         private readonly IPostRepo postRepo;
-        public PostController(IPostRepo postRepo)
+        private readonly IMapper _mapper;
+        public PostController(IPostRepo postRepo, Mapper mapper)
         {
             this.postRepo = postRepo;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IEnumerable<Post> getall()
+        public async Task<IEnumerable<PostViewModel>> getall()
         {
-            return postRepo.get();
+            return _mapper.Map<List<Post>, List<PostViewModel>>(await postRepo.get());
 
         }
         [HttpGet("{id}")]
-        public Post Get(int id)
+        public async Task<PostViewModel> Get(int id)
         {
 
-            return postRepo.get(id);
+            return _mapper.Map<PostViewModel>(await postRepo .get(id));
         }
         [HttpPost]
         public void addPost([FromBody] Post p)
